@@ -264,9 +264,9 @@
     <!-- Floating Hearts Background -->
     <div class="hearts-container" id="heartsContainer"></div>
 
-    <!-- Audio element z Twoją muzyką careless_whisper.mp3 -->
-    <audio id="successMusic" preload="auto">
-        <source src="careless_whisper.mp3" type="audio/mpeg">
+    <!-- Audio element z pliku z repozytorium GitHub -->
+    <audio id="successMusic" preload="auto" crossorigin="anonymous">
+        <source src="https://raw.githubusercontent.com/unabomber19-code/Valentynka/main/careless_whisper.mp3" type="audio/mpeg">
         <!-- Fallback dla starszych przeglądarek -->
         Twoja przeglądarka nie obsługuje odtwarzania audio.
     </audio>
@@ -407,7 +407,7 @@
             mainContainer.classList.add('hidden');
             successContainer.classList.add('active');
             
-            // Odtwórz Twoją muzykę careless_whisper.mp3
+            // Odtwórz muzykę z repozytorium GitHub
             playSuccessMusic();
             
             // Create explosion of hearts
@@ -449,26 +449,30 @@
         }
 
         function playSuccessMusic() {
-            // Ustaw głośność (opcjonalnie)
-            successMusic.volume = 0.8; // 80% głośności
+            // Ustaw głośność
+            successMusic.volume = 0.8;
             
             // Spróbuj odtworzyć muzykę
             const playPromise = successMusic.play();
             
             if (playPromise !== undefined) {
                 playPromise.then(() => {
-                    console.log('Careless Whisper zostało odtworzone pomyślnie!');
+                    console.log('Careless Whisper zostało odtworzone z GitHub!');
                 }).catch(error => {
-                    console.log('Autoodtwarzanie zostało zablokowane przez przeglądarkę:', error);
-                    // W przypadku błędu (blokada autoodtwarzania), dodajemy przycisk do ręcznego odtworzenia
-                    showMusicButton();
+                    console.log('Błąd odtwarzania z GitHub:', error);
+                    // Jeśli GitHub blokuje odtwarzanie, pokaż przycisk z linkiem
+                    showMusicLink();
                 });
             }
         }
 
-        function showMusicButton() {
+        function showMusicLink() {
+            // Sprawdź czy przycisk już istnieje
+            if (document.getElementById('musicLinkBtn')) return;
+            
             const musicBtn = document.createElement('button');
-            musicBtn.textContent = '🎵 Włącz Careless Whisper!';
+            musicBtn.id = 'musicLinkBtn';
+            musicBtn.innerHTML = '🎵 Odtwórz muzykę<br><small>(GitHub)</small>';
             musicBtn.style.cssText = `
                 position: fixed;
                 bottom: 20px;
@@ -485,10 +489,10 @@
                 font-weight: 600;
                 z-index: 1001;
                 box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
-                animation: pulse 1.5s ease-in-out infinite;
+                line-height: 1.4;
             `;
             musicBtn.onclick = () => {
-                successMusic.play();
+                window.open('https://github.com/unabomber19-code/Valentynka/blob/main/careless_whisper.mp3', '_blank');
                 musicBtn.remove();
             };
             document.body.appendChild(musicBtn);
