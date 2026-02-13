@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bobo, czy zostaniesz moją walentynką?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background animation */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 20px;
+            animation: float 6s ease-in infinite;
+            bottom: -100px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .gif-container {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 2rem;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #e91e63;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            min-height: 80px;
+            align-items: center;
+        }
+
+        button {
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            transform-origin: center;
+        }
+
+        .yes-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .no-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
+        }
+
+        .no-btn.moving {
+            position: relative;
+        }
+
+        .success-container {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .success-container.active {
+            display: block;
+        }
+
+        .main-container.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .success-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #e91e63;
+            margin-top: 1rem;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .emoji {
+            font-size: 3rem;
+            margin: 1rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .success-text { font-size: 3rem; }
+            .container { padding: 2rem; }
+            .gif-container { width: 200px; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Main Question Container -->
+    <div class="container main-container" id="mainContainer">
+        <div class="gif-container">
+            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Cute Bear" id="mainGif">
+        </div>
+        
+        <h1>Bobo, czy zostaniesz moją walentynką?</h1>
+        
+        <div class="buttons">
+            <button class="yes-btn" id="yesBtn" onclick="handleYes()">Tak!</button>
+            <button class="no-btn" id="noBtn" onclick="handleNo()">Nie...</button>
+        </div>
+    </div>
+
+    <!-- Success Container -->
+    <div class="container success-container" id="successContainer">
+        <div class="gif-container">
+            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Celebration Bear">
+        </div>
+        <div class="emoji">💕🎉💕</div>
+        <div class="success-text">Kocham Cię! ❤️</div>
+        <p style="margin-top: 1rem; color: #666; font-size: 1.1rem;">Jesteś najlepszą dziewczyną na świecie!</p>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const heartSymbols = ['❤️', '💖', '💕', '💗', '💝', '💘'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 6000);
+            }, 300);
+        }
+
+        createHearts();
+
+        // No button phrases
+        const phrases = [
+            "No",
+            "Are you sure?",
+            "Really sure?",
+            "Think again!",
+            "Last chance!",
+            "Surely not?",
+            "You might regret this!",
+            "Give it another thought!",
+            "Are you absolutely certain?",
+            "This could be a mistake!",
+            "Have a heart!",
+            "Don't be so cold!",
+            "Change of heart?",
+            "Wouldn't you reconsider?",
+            "Is that your final answer?",
+            "You're breaking my heart 💔",
+            "Please? 🥺",
+            "Pretty please? 🥺💕",
+            "I'll be so sad...",
+            "My heart is aching!",
+            "Just say yes! 💝"
+        ];
+
+        let noCount = 0;
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const mainContainer = document.getElementById('mainContainer');
+        const successContainer = document.getElementById('successContainer');
+
+        function handleNo() {
+            noCount++;
+            
+            // Change button text
+            noBtn.textContent = phrases[Math.min(noCount, phrases.length - 1)];
+            
+            // Grow yes button
+            const currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
+            const newSize = currentSize + 10;
+            yesBtn.style.fontSize = newSize + 'px';
+            yesBtn.style.padding = (15 + noCount * 5) + 'px ' + (40 + noCount * 10) + 'px';
+            
+            // Add shake animation to no button
+            noBtn.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                noBtn.style.animation = '';
+            }, 500);
+            
+            // Move no button randomly after a few clicks
+            if (noCount > 3) {
+                const x = (Math.random() - 0.5) * 200;
+                const y = (Math.random() - 0.5) * 100;
+                noBtn.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        }
+
+        function handleYes() {
+            mainContainer.classList.add('hidden');
+            successContainer.classList.add('active');
+            
+            // Create explosion of hearts
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.style.position = 'fixed';
+                    heart.style.left = '50%';
+                    heart.style.top = '50%';
+                    heart.style.fontSize = '30px';
+                    heart.style.pointerEvents = 'none';
+                    heart.style.zIndex = '1000';
+                    heart.style.transform = `translate(-50%, -50%)`;
+                    document.body.appendChild(heart);
+                    
+                    const angle = (Math.PI * 2 * i) / 50;
+                    const velocity = 10 + Math.random() * 10;
+                    let x = 0, y = 0;
+                    let vx = Math.cos(angle) * velocity;
+                    let vy = Math.sin(angle) * velocity;
+                    
+                    const animate = () => {
+                        x += vx;
+                        y += vy;
+                        vy += 0.5; // gravity
+                        heart.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+                        heart.style.opacity = parseFloat(heart.style.opacity || 1) - 0.02;
+                        
+                        if (heart.style.opacity > 0) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            heart.remove();
+                        }
+                    };
+                    requestAnimationFrame(animate);
+                }, i * 30);
+            }
+        }
+
+        // Add shake animation dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px) rotate(-5deg); }
+                75% { transform: translateX(10px) rotate(5deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
